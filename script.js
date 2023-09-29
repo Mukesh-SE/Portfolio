@@ -17,7 +17,7 @@ function githubUser(url) {
 				user["repos"] = await fetchRepos(userData.repos_url);
 
 				// testing
-				console.log(userData);
+				// console.log(userData);
 
 				resolve(user);
 			} else {
@@ -63,7 +63,6 @@ function projects(projects_list) {
 	projects_list.forEach((proj) => {
 		// create list element li
 		const listElement = document.createElement("li");
-		const languagesList = document.createElement("li");
 		const link = document.createElement("a");
 
 		let langauges = [];
@@ -86,7 +85,7 @@ function projects(projects_list) {
 								li_lang.classList.add("html");
 								break;
 							case "CSS":
-								li_lang.classList.add("html");
+								li_lang.classList.add("css");
 								break;
 							case "JavaScript":
 								li_lang.classList.add("js");
