@@ -69,11 +69,16 @@ function projects(projects_list) {
 		async function fetchRepoLanguages() {
 			try {
 				const response = await fetch(`${proj.languages_url}`);
+
 				if (response.status === 200) {
 					const data = await response.json();
 					Object.keys(data).forEach((lang) => {
 						langauges.push(lang);
 					});
+
+					// create ul element for language list and add class
+					const ul_lang = document.createElement("ul");
+					ul_lang.classList.add("langs-wrapper");
 
 					langauges.forEach((lang) => {
 						const li_lang = document.createElement("li");
@@ -97,10 +102,11 @@ function projects(projects_list) {
 								li_lang.classList.add("py");
 								break;
 							default:
-								li_lang.classList.add("und")
+								li_lang.classList.add("und");
 						}
 						li_lang.textContent = lang;
-						listElement.appendChild(li_lang);
+						ul_lang.appendChild(li_lang);
+						listElement.appendChild(ul_lang);
 					});
 				} else {
 					throw "can not fetch repose url language data....";
@@ -139,3 +145,14 @@ async function fetchReposLang(reposUrl) {
 		console.log(error);
 	}
 }
+
+/* project slide */
+
+const project_container = document.querySelector(".project-container");
+const fa_solid_btn = document.querySelector(".fa-solid");
+
+fa_solid_btn.addEventListener("click", () => {
+	fa_solid_btn.classList.toggle('fa-plus')
+	project_container.classList.toggle('show')
+
+});
