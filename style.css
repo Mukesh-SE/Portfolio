@@ -5,13 +5,12 @@
 }
 
 body {
-	padding: 10px;
+	padding: 10px 10px 0 10px;
 	width: 100%;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-
 	font-family: "Courier New", Courier, monospace;
 }
 
@@ -95,18 +94,11 @@ main {
 	}
 }
 
-.fa-solid:hover {
+.projects-sec .fa-solid:hover {
 	background-color: white;
 	border-radius: 100px;
 	color: #072e3a;
 }
-/* 
-.project-container {
-	position: relative;
-	width: 100%;
-	height: 100%;
-}
- */
 
 .projects {
 	margin: 0 0 20px 0;
@@ -133,32 +125,28 @@ main {
 .projects {
 	display: none;
 	opacity: 0;
-	transition: all .5s ease-in-out;
+	transition: all 0.5s ease-in-out;
 }
 
-.show > .projects{
+.show > .projects {
 	opacity: 1;
 	display: grid;
 }
 
-
-
 li.project {
-
 	transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-	&:hover {
-		background-color: #137fa02f;
-		border-color: #137fa0;
-	}
 
 	& a {
+		padding: 10px;
 		text-decoration: none;
 		color: #072e3a;
 		font-weight: 600;
 		font-size: 1.2rem;
 		text-transform: capitalize;
 	}
-	& ul{
+	& ul {
+		padding: 10px;
+		width: 100%;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
@@ -167,14 +155,90 @@ li.project {
 		list-style: none;
 	}
 }
+li.project:hover {
+	transform: scale(1.05);
+	& ul {
+		background: #137fa055;
+	}
+	& a {
+		width: 100%;
+		background-color: #072e3a;
+		color: white;
+	}
+}
 
-
-section.about{
+section.about {
 	padding: 10px;
+	width: 100%;
+	height: 40vh;
 	color: #072e3a;
+	display: grid;
+	place-content: center;
+	place-items: center;
+	row-gap: 10px;
 
-
-	& p{
+	& p {
 		font-size: 1.3rem;
+	}
+}
+
+/* footer */
+footer {
+	padding: 10px;
+	width: 100%;
+	height: 100%;
+	color: white;
+	display: grid;
+	place-items: center;
+}
+
+footer #contact{
+	padding: 10px;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	background-color: #072e3a;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 5px;
+}
+footer .contact-wrapper{
+	display: grid;
+	gap: 5px;
+	grid-template-columns: repeat(3, 1fr);
+	place-items: center;
+}
+
+footer .contact-wrapper ul {
+	display: flex;
+	column-gap: 10px;
+
+	& li {
+		list-style-type: none;
+	}
+
+	& a{
+		color: white;
+		text-decoration: none;
+		transition: all .4s cubic-bezier(0.075, 0.82, 0.165, 1);
+	}
+}
+
+footer ul > li > a{
+	position: relative;
+	&::before{
+		content: "";
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 0%;
+		height: 1px;
+		background-color: white;
+		transition: all .3s cubic-bezier(0.165, 0.84, 0.44, 1);
+		overflow: hidden;
+	}
+	&:hover::before{
+		width: 100%;
 	}
 }
