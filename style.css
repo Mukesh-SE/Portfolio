@@ -204,7 +204,8 @@ section.about {
 	row-gap: 10px;
 
 	& p {
-		font-size: 1.3rem;
+		font-size: 1.35rem;
+		font-weight: 500;
 	}
 }
 
