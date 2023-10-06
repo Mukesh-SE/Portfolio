@@ -5,7 +5,6 @@
 }
 
 body {
-	padding: 10px 10px 0 10px;
 	width: 100%;
 	display: flex;
 	flex-direction: column;
@@ -15,7 +14,6 @@ body {
 }
 
 main {
-	margin-bottom: 20px;
 	width: 100%;
 	display: flex;
 	align-items: center;
@@ -155,6 +153,29 @@ li.project {
 		list-style: none;
 	}
 }
+
+li.project a {
+	position: relative;
+
+	&::before,
+	&::after {
+		content: "";
+		width: 0;
+		height: 2px;
+		background-color: #072e3a;
+		position: absolute;
+		transition: all 0.4s ease-in-out;
+	}
+	&::before {
+		top: 0;
+		left: 0;
+	}
+	&::after {
+		bottom: 0;
+		right: 0;
+	}
+}
+
 li.project:hover {
 	transform: scale(1.05);
 	& ul {
@@ -162,9 +183,14 @@ li.project:hover {
 	}
 	& a {
 		width: 100%;
-		background-color: #072e3a;
-		color: white;
 	}
+
+	& a::after,
+	& a::before {
+		width: 100%;
+	}
+
+
 }
 
 section.about {
@@ -192,7 +218,7 @@ footer {
 	place-items: center;
 }
 
-footer #contact{
+footer #contact {
 	padding: 10px;
 	width: 100%;
 	height: 100%;
@@ -203,31 +229,26 @@ footer #contact{
 	align-items: center;
 	gap: 5px;
 }
-footer .contact-wrapper{
+
+footer .contact-wrapper ul {
 	display: grid;
 	gap: 5px;
-	grid-template-columns: repeat(3, 1fr);
+	grid-template-columns: repeat(auto, 1fr);
 	place-items: center;
 }
 
-footer .contact-wrapper ul {
-	display: flex;
-	column-gap: 10px;
-
-	& li {
-		list-style-type: none;
-	}
-
-	& a{
-		color: white;
-		text-decoration: none;
-		transition: all .4s cubic-bezier(0.075, 0.82, 0.165, 1);
-	}
+li {
+	list-style-type: none;
 }
 
-footer ul > li > a{
+footer .contact-wrapper > ul > li > a {
+	font-size: 1.2rem;
+	color: white;
+	text-decoration: none;
 	position: relative;
-	&::before{
+
+	transition: all 0.4s cubic-bezier(0.075, 0.82, 0.165, 1);
+	&::before {
 		content: "";
 		position: absolute;
 		bottom: 0;
@@ -235,10 +256,10 @@ footer ul > li > a{
 		width: 0%;
 		height: 1px;
 		background-color: white;
-		transition: all .3s cubic-bezier(0.165, 0.84, 0.44, 1);
+		transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
 		overflow: hidden;
 	}
-	&:hover::before{
+	&:hover::before {
 		width: 100%;
 	}
 }
