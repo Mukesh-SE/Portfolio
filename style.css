@@ -233,9 +233,9 @@ footer #contact {
 
 footer .contact-wrapper ul {
 	display: grid;
-	gap: 5px;
+	gap: 10px 15px;
 	grid-template-columns: repeat(auto, 1fr);
-	place-items: center;
+	place-content: center;
 }
 
 li {
