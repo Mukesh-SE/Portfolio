@@ -7,8 +7,8 @@ const parent_ul = document.querySelector("section ul");
 async function repoDetail(repo) {
 	try {
 		let repo_li = document.createElement("li");
-		let repo_lang_ul = document.createElement("ul");
 		const repo_name = document.createElement("h2");
+		const repo_link = document.createElement('a')
 		const lang_data = await fetch(repo.languages_url);
 		const languages_Obj = await lang_data.json();
 
@@ -22,7 +22,10 @@ async function repoDetail(repo) {
 			lang_values += languages_Obj[lang];
 		});
 
-		repo_name.textContent = `${repo.name}`;
+		repo_link.href = repo.html_url
+		repo_link.textContent = repo.name
+
+		repo_name.appendChild(repo_link);
 		repo_li.appendChild(repo_name);
 
 		// give precentage of each languages used in repos
