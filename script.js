@@ -1,158 +1,101 @@
-const profile_pic = document.querySelector("main img");
-const name = document.querySelector("main #name");
-const unorder_list = document.querySelector("section div ul");
-
 const userApiLink = `https://api.github.com/users/Mukesh-SE`;
-const user = {};
+const reposUrl = `${userApiLink}/repos`;
 
-function githubUser(url) {
-	return new Promise(async (resolve, reject) => {
-		try {
-			const request = await fetch(url);
-			if (request.status === 200) {
-				const userData = await request.json();
+const btn = document.getElementById("more-btn");
+const parent_ul = document.querySelector("section ul");
 
-				user["name"] = userData.name;
-				user["avatar"] = userData.avatar_url;
-				user["repos"] = await fetchRepos(userData.repos_url);
-
-				// testing
-				// console.log(userData);
-
-				resolve(user);
-			} else {
-				throw "failed to fetch api...";
-			}
-		} catch (err) {
-			reject(err);
-		}
-	});
-}
-
-// Fetch Repositories
-async function fetchRepos(reposUrls) {
+async function repoDetail(repo) {
 	try {
-		const response = await fetch(reposUrls);
-		if (response.status === 200) {
-			return await response.json();
-		} else {
-			throw "can not fetch repose url data....";
-		}
-	} catch (error) {
-		console.log(error);
+		let repo_li = document.createElement("li");
+		let repo_lang_ul = document.createElement("ul");
+		const repo_name = document.createElement("h2");
+		const lang_data = await fetch(repo.languages_url);
+		const languages_Obj = await lang_data.json();
+
+		repo_name.classList.add("repo_name");
+		// array languages
+		const languages_name = Object.keys(languages_Obj);
+
+		// for perectage ...
+		let lang_values = 0;
+		languages_name.forEach((lang) => {
+			lang_values += languages_Obj[lang];
+		});
+
+		repo_name.textContent = `${repo.name}`;
+		repo_li.appendChild(repo_name);
+
+		// give precentage of each languages used in repos
+		language_percentage(languages_Obj, languages_name, lang_values, repo_li);
+
+		parent_ul.appendChild(repo_li);
+	} catch (err) {
+		console.log(err);
 	}
 }
 
-// Fetch GitHub API.....
-githubUser(userApiLink)
-	.then((data) => {
-		// HTML ---->
-		name.textContent = data.name;
-		profile_pic.src = data.avatar;
+// ----------------------
+let load = 3;
 
-		projects(data.repos);
-		// console.log(data.repos[0]);
-	})
-	.catch((error) => {
-		console.log(error);
-	});
-
-// assigning the projects to Section > main > ul
-
-function projects(projects_list) {
-	projects_list.forEach((proj) => {
-		// create list element li
-		const listElement = document.createElement("li");
-		const link = document.createElement("a");
-
-		let langauges = [];
-		async function fetchRepoLanguages() {
-			try {
-				const response = await fetch(`${proj.languages_url}`);
-
-				if (response.status === 200) {
-					const data = await response.json();
-					Object.keys(data).forEach((lang) => {
-						langauges.push(lang);
-					});
-
-					// create ul element for language list and add class
-					const ul_lang = document.createElement("ul");
-					ul_lang.classList.add("langs-wrapper");
-
-					langauges.forEach((lang) => {
-						const li_lang = document.createElement("li");
-						// add class
-						li_lang.classList.add("langs");
-
-						switch (lang) {
-							case "HTML":
-								li_lang.classList.add("html");
-								break;
-							case "CSS":
-								li_lang.classList.add("css");
-								break;
-							case "JavaScript":
-								li_lang.classList.add("js");
-								break;
-							case "TypeScript":
-								li_lang.classList.add("ts");
-								break;
-							case "Python":
-								li_lang.classList.add("py");
-								break;
-							default:
-								li_lang.classList.add("und");
-						}
-						li_lang.textContent = lang;
-						ul_lang.appendChild(li_lang);
-						listElement.appendChild(ul_lang);
-					});
-				} else {
-					throw "can not fetch repose url language data....";
-				}
-			} catch (error) {
-				console.log(error);
-			}
-		}
-
-		fetchRepoLanguages();
-
-		listElement.classList.add("project");
-
-		link.textContent = proj.name;
-		link.href = proj.html_url;
-
-		listElement.appendChild(link);
-		unorder_list.appendChild(listElement);
-	});
-	// console.log(projects_list[0]);
-}
-
-// fetch Repositories Languages
-
-async function fetchReposLang(reposUrl) {
+const fetchRepos = async (url) => {
 	try {
-		const response = await fetch(`${reposUrl}`);
+		const response = await fetch(url);
 		if (response.status === 200) {
-			const data = await response.json();
+			const repos = await response.json();
 
-			const language = Object.keys(data);
-		} else {
-			throw "can not fetch repose url language data....";
+			if (load === 3) {
+				repos.splice(0, load).forEach((repo, index) => {
+					repoDetail(repo);
+				});
+			}
+
+			// for load more
+			btn.addEventListener("click", async () => {
+				repos.splice(0, load).forEach((repo, index) => {
+					repoDetail(repo);
+					load += 3;
+					// hide after loading all repos..
+				});
+			});
 		}
-	} catch (error) {
-		console.log(error);
+	} catch (err) {
+		console.log(err);
 	}
+};
+
+fetchRepos(reposUrl);
+
+// --------------------------
+// fetch repo's languages
+function language_percentage(
+	languages_Object,
+	languages,
+	total_lang_value,
+	repo_lang_list
+) {
+	let lang_ul = document.createElement("ul");
+	lang_ul.classList.add("languages");
+	languages.forEach((lang) => {
+		let languages_list = document.createElement("li");
+		let lang_name = document.createElement("span");
+		lang_name.classList.add("lang");
+
+		let lang_percnt = document.createElement("span");
+		lang_percnt.classList.add("percnt");
+		let lang_percentage =
+			Math.round((languages_Object[lang] * 100) / total_lang_value) + "%";
+
+		// console.log(lang, lang_percentage + "%");
+
+		lang_name.textContent = lang;
+		lang_percnt.textContent = lang_percentage;
+
+		languages_list.appendChild(lang_name);
+		languages_list.appendChild(lang_percnt);
+		lang_ul.appendChild(languages_list);
+		repo_lang_list.appendChild(lang_ul);
+	});
 }
 
-/* project slide */
-
-const project_container = document.querySelector(".project-container");
-const fa_solid_btn = document.querySelector(".fa-solid");
-
-fa_solid_btn.addEventListener("click", () => {
-	fa_solid_btn.classList.toggle('fa-plus')
-	project_container.classList.toggle('show')
-
-});
+// let arr = [1, 2, 3, 4, 5, 6, 7];
+// arr((num) => console.log(num));
